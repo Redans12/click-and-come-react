@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { supabase } from '../config/supabaseClient';
+import bcrypt from 'bcryptjs';
 import "./Register.css";
 import { IoClose, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
@@ -14,6 +16,8 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [captchaChecked, setCaptchaChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -22,20 +26,83 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!acceptedTerms) {
-      alert(
-        "Debes aceptar la Política de privacidad y las condiciones del servicio"
-      );
+      alert("Debes aceptar la Política de privacidad y las condiciones del servicio");
       return;
     }
     if (!captchaChecked) {
       alert("Por favor completa el captcha");
       return;
     }
-    console.log("Registro:", formData);
-    // Aquí irá la lógica de registro con Supabase
+
+    setLoading(true);
+    setError('');
+
+    try {
+      // Validar que la contraseña tenga al menos 6 caracteres
+      if (formData.password.length < 6) {
+        throw new Error('La contraseña debe tener al menos 6 caracteres');
+      }
+
+      // Hashear la contraseña
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(formData.password, salt);
+
+      // Combinar nombre completo
+      const nombreCompleto = `${formData.firstName} ${formData.lastName}`.trim();
+      
+      // Combinar teléfono con código de país
+      const telefonoCompleto = `${formData.countryCode} ${formData.phone}`.trim();
+
+      // Insertar usuario en la base de datos
+      const { data, error } = await supabase
+        .from('usuarios')
+        .insert([
+          {
+            nombre: nombreCompleto,
+            email: formData.email,
+            password_hash: passwordHash,
+            telefono: telefonoCompleto,
+            id_rol: 2 // 2 = cliente
+          }
+        ])
+        .select();
+
+      if (error) {
+        // Manejar error de email duplicado
+        if (error.code === '23505') {
+          throw new Error('Este email ya está registrado');
+        }
+        throw error;
+      }
+
+      console.log('Registro exitoso:', data);
+      alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
+      
+      // Limpiar formulario
+      setFormData({
+        firstName: "",
+        lastName: "",
+        countryCode: "+52",
+        phone: "",
+        email: "",
+        password: "",
+      });
+      setAcceptedTerms(false);
+      setCaptchaChecked(false);
+      
+      // Cambiar a login
+      onSwitchToLogin();
+
+    } catch (error) {
+      setError(error.message);
+      console.error('Error en registro:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -122,8 +189,7 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
               </div>
               <small className="help-text">
                 Añadiremos tu número de teléfono para que podamos contactar
-                contigo con novedas y texto por mensaje de confirmar y gestionar
-                tus reservas.
+                contigo con novedades y confirmar y gestionar tus reservas.
               </small>
             </div>
 
@@ -149,10 +215,11 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
-                  placeholder="Contraseña"
+                  placeholder="Contraseña (mínimo 6 caracteres)"
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  minLength={6}
                 />
                 <button
                   type="button"
@@ -208,9 +275,24 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
               </div>
             </div>
 
+            {/* Mensaje de error */}
+            {error && (
+              <div className="error-message" style={{ 
+                color: '#ff4757', 
+                fontSize: '14px', 
+                marginTop: '10px',
+                padding: '10px',
+                backgroundColor: '#ffe5e8',
+                borderRadius: '8px',
+                textAlign: 'center'
+              }}>
+                {error}
+              </div>
+            )}
+
             {/* Botón submit */}
-            <button type="submit" className="submit-button">
-              Crear cuenta
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? 'Creando cuenta...' : 'Crear cuenta'}
             </button>
           </form>
         </div>

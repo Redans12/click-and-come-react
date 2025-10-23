@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../config/supabaseClient';
+import bcrypt from 'bcryptjs';
 import './Login.css';
 import { IoClose, IoEyeOutline, IoEyeOffOutline, IoArrowBack } from 'react-icons/io5';
 
@@ -6,11 +9,68 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login:', { email, password });
-    // Aquí el backend agregará la lógica de Supabase
+    setLoading(true);
+    setError('');
+
+    try {
+      // Buscar usuario por email con JOIN a la tabla roles
+      const { data: usuarios, error: queryError } = await supabase
+        .from('usuarios')
+        .select(`
+          *,
+          roles (
+            id_rol,
+            nombre
+          )
+        `)
+        .eq('email', email)
+        .single();
+
+      if (queryError) {
+        throw new Error('Email o contraseña incorrectos');
+      }
+
+      // Verificar si el usuario está bloqueado
+      if (usuarios.esta_bloqueado) {
+        throw new Error('Tu cuenta ha sido bloqueada. Contacta al administrador.');
+      }
+
+      // Comparar contraseña
+      const isPasswordValid = await bcrypt.compare(password, usuarios.password_hash);
+
+      if (!isPasswordValid) {
+        throw new Error('Email o contraseña incorrectos');
+      }
+
+      // Login exitoso - Guardar usuario en localStorage
+      const userSession = {
+        id_usuario: usuarios.id_usuario,
+        nombre: usuarios.nombre,
+        email: usuarios.email,
+        rol: usuarios.roles.nombre,
+        id_rol: usuarios.id_rol
+      };
+      
+      localStorage.setItem('user', JSON.stringify(userSession));
+
+      console.log('Login exitoso:', userSession);
+      
+      // Cerrar modal y redirigir
+      onClose();
+      navigate('/dashboard');
+
+    } catch (error) {
+      setError(error.message);
+      console.error('Error en login:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -67,8 +127,22 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
               </div>
             </div>
 
-            <button type="submit" className="submit-button">
-              Continuar
+            {error && (
+              <div className="error-message" style={{ 
+                color: '#ff4757', 
+                fontSize: '14px', 
+                marginTop: '10px',
+                padding: '10px',
+                backgroundColor: '#ffe5e8',
+                borderRadius: '8px',
+                textAlign: 'center'
+              }}>
+                {error}
+              </div>
+            )}
+
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? 'Cargando...' : 'Continuar'}
             </button>
 
             <button 
