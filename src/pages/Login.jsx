@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../config/supabaseClient";
@@ -8,15 +7,6 @@ import "./Login.css";
 const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-=======
-import React, { useState } from 'react';
-import './Login.css';
-import { IoClose, IoEyeOutline, IoEyeOffOutline, IoArrowBack } from 'react-icons/io5';
-
-const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
->>>>>>> main
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -88,7 +78,6 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-<<<<<<< HEAD
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>
           ✕
@@ -98,62 +87,23 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
           <div className="login-section">
             <div className="logo-section">
               <div className="logo-placeholder">LOGO</div>
-=======
-      <div className="login-modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* Botón volver */}
-        <button className="back-button" onClick={onClose}>
-          <IoArrowBack />
-        </button>
-
-        {/* Botón cerrar */}
-        <button className="modal-close" onClick={onClose}>
-          <IoClose />
-        </button>
-
-        <div className="login-container">
-          {/* Logo */}
-          <div className="logo-section">
-            <div className="logo-placeholder">LOGO</div>
-          </div>
+            </div>
 
           <h2 className="login-title">Inicia sesión:</h2>
 
-          <form onSubmit={handleSubmit} className="login-form">
-            <div className="form-group">
-              <label htmlFor="email">DIRECCIÓN DE EMAIL*</label>
-              <input
-                type="email"
-                id="email"
-                placeholder="Dirección de email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
->>>>>>> main
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">CONTRASEÑA*</label>
-              <div className="password-input-wrapper">
+            <form onSubmit={handleSubmit} className="login-form">
+              <div className="form-group">
+                <label htmlFor="email">DIRECCIÓN DE EMAIL:</label>
                 <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  placeholder="Contraseña"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  type="email"
+                  id="email"
+                  placeholder="Dirección de email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
-                <button
-                  type="button"
-                  className="toggle-password"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-                </button>
               </div>
-            </div>
 
-<<<<<<< HEAD
               <div className="form-group">
                 <label htmlFor="password">CONTRASEÑA:</label>
                 <div className="password-input-wrapper">
@@ -223,33 +173,6 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
               alt="Restaurante"
             />
           </div>
-=======
-            <button type="submit" className="submit-button">
-              Continuar
-            </button>
-
-            <button 
-              type="button" 
-              className="forgot-password-link"
-              onClick={() => alert('Funcionalidad de recuperación próximamente')}
-            >
-              ¿Has Olvidado La Contraseña?
-            </button>
-
-            <div className="divider"></div>
-
-            <div className="signup-section">
-              <span>¿No tienes una cuenta? </span>
-              <button 
-                type="button"
-                className="signup-link-button"
-                onClick={onSwitchToRegister}
-              >
-                Registrarse
-              </button>
-            </div>
-          </form>
->>>>>>> main
         </div>
       </div>
     </div>

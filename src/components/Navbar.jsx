@@ -3,15 +3,9 @@ import "./Navbar.css";
 import { IoChevronDown, IoSearch, IoPeopleOutline } from "react-icons/io5";
 
 const Navbar = ({ onLoginClick }) => {
-<<<<<<< HEAD
   const [location] = useState('Morelia, Michoacán'); // Quité setLocation
   const [searchTerm, setSearchTerm] = useState('');
   const [guests] = useState(2); // Quité setGuests
-=======
-  const [location] = useState("Morelia, Michoacán");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [guests] = useState(2);
->>>>>>> main
 
   return (
     <nav className="navbar">
