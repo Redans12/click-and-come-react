@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import HeroCarousel from './components/HeroCarousel';
@@ -20,20 +21,22 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Navbar onLoginClick={() => setIsLoginOpen(true)} />
-      <HeroCarousel />
-      <Login 
-        isOpen={isLoginOpen} 
-        onClose={() => setIsLoginOpen(false)}
-        onSwitchToRegister={handleSwitchToRegister}
-      />
-      <Register 
-        isOpen={isRegisterOpen} 
-        onClose={() => setIsRegisterOpen(false)}
-        onSwitchToLogin={handleSwitchToLogin}
-      />
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar onLoginClick={() => setIsLoginOpen(true)} />
+        <HeroCarousel />
+        <Login 
+          isOpen={isLoginOpen} 
+          onClose={() => setIsLoginOpen(false)}
+          onSwitchToRegister={handleSwitchToRegister}
+        />
+        <Register 
+          isOpen={isRegisterOpen} 
+          onClose={() => setIsRegisterOpen(false)}
+          onSwitchToLogin={handleSwitchToLogin}
+        />
+      </div>
+    </Router>
   );
 }
 
