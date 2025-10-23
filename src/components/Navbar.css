@@ -33,24 +33,23 @@
 .location-selector span {
   font-size: 14px;
   color: #333;
+  font-weight: 500;
 }
 
-.dropdown-arrow {
-  background: none;
-  border: none;
+.icon-dropdown {
   color: #666;
-  cursor: pointer;
-  font-size: 12px;
+  font-size: 18px;
 }
 
 .search-bar {
-  display: flex;
+    display: flex;
   align-items: center;
   background: #f5f5f5;
   border-radius: 8px;
   padding: 8px 15px;
   flex: 1;
   max-width: 400px;
+  gap: 15px;
 }
 
 .search-bar input {
@@ -70,7 +69,16 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 20px;
+  padding: 0;
+}
+
+.search-button:hover {
+  color: #333;
 }
 
 .navbar-right {
@@ -90,14 +98,16 @@
   cursor: pointer;
   padding: 8px 12px;
   transition: opacity 0.3s;
+  font-weight: 500;
 }
 
 .nav-item:hover {
   opacity: 0.7;
 }
 
-.icon-person {
-  font-size: 18px;
+.nav-item .icon {
+  font-size: 20px;
+  color: #d32f2f;
 }
 
 .separator {
@@ -131,11 +141,16 @@
   .navbar {
     flex-direction: column;
     gap: 15px;
+    padding: 15px 20px;
   }
 
   .navbar-left,
   .navbar-right {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .search-bar {
+    max-width: 100%;
   }
 }

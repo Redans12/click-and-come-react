@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
-import './Navbar.css';
+import React, { useState } from "react";
+import "./Navbar.css";
+import { IoChevronDown, IoSearch, IoPeopleOutline } from "react-icons/io5";
 
 const Navbar = ({ onLoginClick }) => {
+<<<<<<< HEAD
   const [location] = useState('Morelia, Michoacán'); // Quité setLocation
   const [searchTerm, setSearchTerm] = useState('');
   const [guests] = useState(2); // Quité setGuests
+=======
+  const [location] = useState("Morelia, Michoacán");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [guests] = useState(2);
+>>>>>>> main
 
   return (
     <nav className="navbar">
@@ -12,41 +19,39 @@ const Navbar = ({ onLoginClick }) => {
         {/* Selector de ubicación */}
         <div className="location-selector">
           <span>{location}</span>
-          <button className="dropdown-arrow">▼</button>
+          <IoChevronDown className="icon-dropdown" />
         </div>
 
         {/* Barra de búsqueda */}
         <div className="search-bar">
+          <button className="search-button">
+            <IoSearch />
+          </button>
           <input
             type="text"
             placeholder="Buscar restaurante"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="search-button">🔍</button>
         </div>
       </div>
 
       <div className="navbar-right">
         {/* Número de personas */}
         <div className="nav-item">
-          <span className="icon-person">👥</span>
+          <IoPeopleOutline className="icon" />
           <span>{guests}</span>
         </div>
 
         <div className="separator"></div>
 
         {/* Botón Hoy */}
-        <button className="nav-item nav-button">
-          hoy
-        </button>
+        <button className="nav-item nav-button">hoy</button>
 
         <div className="separator"></div>
 
         {/* Botón Todo el día */}
-        <button className="nav-item nav-button">
-          Todo el día
-        </button>
+        <button className="nav-item nav-button">Todo el día</button>
 
         <div className="separator"></div>
 

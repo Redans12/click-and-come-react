@@ -1,13 +1,22 @@
 .register-modal-content {
   background: white;
+<<<<<<< HEAD
   border-radius: 16px;
   max-width: 550px;
+=======
+  border-radius: 12px;
+  max-width: 600px;
+>>>>>>> main
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+<<<<<<< HEAD
   padding: 40px;
+=======
+  padding: 50px 60px;
+>>>>>>> main
 }
 
 .back-button {
@@ -18,15 +27,25 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
+<<<<<<< HEAD
   color: #666;
   padding: 5px 10px;
   transition: color 0.3s;
+=======
+  color: #999;
+  padding: 5px;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+>>>>>>> main
 }
 
 .back-button:hover {
   color: #333;
 }
 
+<<<<<<< HEAD
 .register-container {
   margin-top: 20px;
 }
@@ -37,6 +56,44 @@
   margin-bottom: 15px;
   font-weight: 600;
   line-height: 1.3;
+=======
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border: 2px solid #5B8DEF;
+  font-size: 20px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5B8DEF;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.modal-close:hover {
+  background: #5B8DEF;
+  color: white;
+}
+
+.register-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.register-title {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;  /* ← Cambiado a center */
+>>>>>>> main
 }
 
 .register-subtitle {
@@ -44,6 +101,10 @@
   color: #666;
   margin-bottom: 10px;
   line-height: 1.5;
+<<<<<<< HEAD
+=======
+  text-align: center;  /* ← Cambiado a center */
+>>>>>>> main
 }
 
 .register-note {
@@ -51,6 +112,10 @@
   color: #999;
   margin-bottom: 25px;
   font-style: italic;
+<<<<<<< HEAD
+=======
+  text-align: center;  /* ← Cambiado a center */
+>>>>>>> main
 }
 
 .register-form {
@@ -62,6 +127,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: 6px;
 }
 
@@ -69,37 +135,80 @@
   font-size: 13px;
   color: #333;
   font-weight: 500;
+=======
+  gap: 8px;
+  width: 100%;
+}
+
+.form-group label {
+  font-size: 11px;
+  color: #999;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+>>>>>>> main
 }
 
 .form-group input,
 .form-group select {
+<<<<<<< HEAD
   padding: 12px 14px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
   transition: all 0.3s ease;
   font-family: inherit;
+=======
+  padding: 14px 16px;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  font-size: 15px;
+  color: #333;
+  transition: all 0.3s ease;
+  background: #FAFAFA;
+  font-family: inherit;
+  width: 100%;
+>>>>>>> main
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
+<<<<<<< HEAD
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-group input::placeholder {
   color: #aaa;
+=======
+  border-color: #5B8DEF;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #BDBDBD;
+>>>>>>> main
 }
 
 .phone-input-group {
   display: grid;
   grid-template-columns: 80px 1fr;
   gap: 10px;
+<<<<<<< HEAD
 }
 
 .country-code {
   padding: 12px 8px;
+=======
+  width: 100%;
+}
+
+.country-code {
+  padding: 14px 8px;
+>>>>>>> main
 }
 
 .help-text {
@@ -107,10 +216,18 @@
   color: #666;
   line-height: 1.4;
   margin-top: 4px;
+<<<<<<< HEAD
+=======
+  text-align: left;
+>>>>>>> main
 }
 
 .password-input-wrapper {
   position: relative;
+<<<<<<< HEAD
+=======
+  width: 100%;
+>>>>>>> main
 }
 
 .password-input-wrapper input {
@@ -120,25 +237,41 @@
 
 .toggle-password {
   position: absolute;
+<<<<<<< HEAD
   right: 12px;
+=======
+  right: 14px;
+>>>>>>> main
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
   font-size: 20px;
+<<<<<<< HEAD
   color: #666;
+=======
+  color: #999;
+>>>>>>> main
   padding: 5px;
   display: flex;
   align-items: center;
 }
 
 .toggle-password:hover {
+<<<<<<< HEAD
   color: #667eea;
+=======
+  color: #5B8DEF;
+>>>>>>> main
 }
 
 .checkbox-group {
   margin-top: 10px;
+<<<<<<< HEAD
+=======
+  width: 100%;
+>>>>>>> main
 }
 
 .checkbox-label {
@@ -148,6 +281,11 @@
   font-size: 13px;
   color: #666;
   cursor: pointer;
+<<<<<<< HEAD
+=======
+  text-align: left;
+  width: 100%;
+>>>>>>> main
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -158,23 +296,57 @@
   flex-shrink: 0;
 }
 
+<<<<<<< HEAD
 .checkbox-label a {
   color: #4169E1;
   text-decoration: none;
 }
 
 .checkbox-label a:hover {
+=======
+.checkbox-label span {
+  flex: 1;
+  text-align: left;
+}
+
+.terms-link {
+  background: none;
+  border: none;
+  color: #5B8DEF;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.terms-link:hover {
+>>>>>>> main
   text-decoration: underline;
 }
 
 .captcha-box {
+<<<<<<< HEAD
   border: 1px solid #ddd;
   border-radius: 6px;
+=======
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+>>>>>>> main
   padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+<<<<<<< HEAD
   background: #f9f9f9;
+=======
+  background: #FAFAFA;
+  width: 100%;
+}
+
+.captcha-box .checkbox-label {
+  margin: 0;
+>>>>>>> main
 }
 
 .recaptcha-logo {
@@ -198,17 +370,29 @@
   color: white;
   border: none;
   padding: 14px;
+<<<<<<< HEAD
   border-radius: 6px;
   font-size: 15px;
+=======
+  border-radius: 4px;
+  font-size: 16px;
+>>>>>>> main
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 10px;
+<<<<<<< HEAD
+=======
+  width: 100%;
+>>>>>>> main
 }
 
 .submit-button:hover {
   background: #7393e8;
+<<<<<<< HEAD
   transform: translateY(-1px);
+=======
+>>>>>>> main
   box-shadow: 0 4px 12px rgba(139, 164, 243, 0.4);
 }
 
@@ -239,17 +423,26 @@
 
 @media (max-width: 768px) {
   .register-modal-content {
+<<<<<<< HEAD
     padding: 30px 20px;
+=======
+    padding: 40px 30px;
+>>>>>>> main
     max-height: 95vh;
   }
 
   .register-title {
+<<<<<<< HEAD
     font-size: 20px;
+=======
+    font-size: 18px;
+>>>>>>> main
   }
 
   .phone-input-group {
     grid-template-columns: 70px 1fr;
   }
+<<<<<<< HEAD
 }
 
 .terms-link {
@@ -265,4 +458,6 @@
 
 .terms-link:hover {
   text-decoration: underline;
+=======
+>>>>>>> main
 }

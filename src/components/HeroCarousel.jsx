@@ -19,17 +19,17 @@ const HeroCarousel = () => {
   const slides = [
     {
       id: 1,
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200',
+      image: './images/carrusel1.png',
       alt: 'Restaurante elegante'
     },
     {
       id: 2,
-      image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200',
+      image: './images/carrusel2.png',
       alt: 'Interior restaurante'
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200',
+      image: './images/carrusel3.png',
       alt: 'Comida gourmet'
     },
   ];
