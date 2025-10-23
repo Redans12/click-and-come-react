@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,58 +13,64 @@
   padding: 20px;
 }
 
-.modal-content {
+.login-modal-content {
   background: white;
-  border-radius: 16px;
-  max-width: 900px;
+  border-radius: 12px;
+  max-width: 600px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
+  padding: 50px 60px;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  padding: 5px;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button:hover {
+  color: #333;
 }
 
 .modal-close {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 20px;
+  right: 20px;
   background: white;
-  border: none;
-  font-size: 24px;
+  border: 2px solid #5B8DEF;
+  font-size: 20px;
   cursor: pointer;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  color: #666;
+  color: #5B8DEF;
   transition: all 0.3s;
+  padding: 0;
 }
 
 .modal-close:hover {
-  background: #f5f5f5;
-  color: #333;
+  background: #5B8DEF;
+  color: white;
 }
 
-.modal-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.login-section {
-  padding: 50px 40px;
-}
-
-.image-section {
-  height: 100%;
-  overflow: hidden;
-}
-
-.image-section img {
+.login-container {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .logo-section {
@@ -73,27 +79,25 @@
 }
 
 .logo-placeholder {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 15px 25px;
-  border-radius: 8px;
-  font-size: 20px;
-  font-weight: bold;
+  color: #999;
+  font-size: 18px;
+  font-weight: 600;
   letter-spacing: 2px;
-  display: inline-block;
+  text-transform: uppercase;
 }
 
 .login-title {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 25px;
-  font-weight: 600;
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 30px;
+  font-weight: 500;
+  text-align: left;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .form-group {
@@ -104,28 +108,31 @@
 
 .form-group label {
   font-size: 11px;
-  color: #666;
-  font-weight: 600;
+  color: #999;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .form-group input {
-  padding: 12px 14px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 14px 16px;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  font-size: 15px;
+  color: #333;
   transition: all 0.3s ease;
+  background: #FAFAFA;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #5B8DEF;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
 }
 
 .form-group input::placeholder {
-  color: #aaa;
+  color: #BDBDBD;
 }
 
 .password-input-wrapper {
@@ -139,82 +146,114 @@
 
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: #666;
+  font-size: 20px;
+  color: #999;
   padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toggle-password:hover {
-  color: #667eea;
+  color: #5B8DEF;
 }
 
 .submit-button {
-  background: #4169E1;
+  background: #5B8DEF;
   color: white;
   border: none;
-  padding: 13px;
-  border-radius: 6px;
-  font-size: 15px;
+  padding: 14px;
+  border-radius: 4px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .submit-button:hover {
-  background: #3154c4;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(65, 105, 225, 0.3);
+  background: #4A7BD8;
+  box-shadow: 0 4px 12px rgba(91, 141, 239, 0.3);
 }
 
-.forgot-password {
+.forgot-password-link {
   text-align: center;
-  color: #4169E1;
-  text-decoration: none;
-  font-size: 13px;
-  margin-top: 5px;
+  color: #5B8DEF;
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 8px;
   transition: color 0.3s;
 }
 
-.forgot-password:hover {
+.forgot-password-link:hover {
+  color: #4A7BD8;
   text-decoration: underline;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #E0E0E0;
+  margin: 10px 0;
 }
 
 .signup-section {
   text-align: center;
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-  font-size: 13px;
+  font-size: 14px;
   color: #666;
+  padding: 10px 0;
 }
 
-.signup-link {
-  color: #4169E1;
-  text-decoration: none;
+.signup-link-button {
+  background: none;
+  border: none;
+  color: #5B8DEF;
   font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
 }
 
-.signup-link:hover {
+.signup-link-button:hover {
   text-decoration: underline;
 }
 
+/* Scrollbar personalizada */
+.login-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.login-modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.login-modal-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.login-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 @media (max-width: 768px) {
-  .modal-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .image-section {
-    display: none;
-  }
-
-  .login-section {
+  .login-modal-content {
     padding: 40px 30px;
+    max-height: 95vh;
+  }
+
+  .login-title {
+    font-size: 18px;
   }
 }
