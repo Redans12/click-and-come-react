@@ -218,3 +218,20 @@
     padding: 40px 30px;
   }
 }
+
+.forgot-password {
+  text-align: center;
+  color: #4169E1;
+  text-decoration: none;
+  font-size: 13px;
+  margin-top: 5px;
+  transition: color 0.3s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}

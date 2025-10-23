@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import './Navbar.css';
 
 const Navbar = ({ onLoginClick }) => {
-  const [location, setLocation] = useState('Morelia, Michoacán');
+  const [location] = useState('Morelia, Michoacán'); // Quité setLocation
   const [searchTerm, setSearchTerm] = useState('');
-  const [guests, setGuests] = useState(2);
+  const [guests] = useState(2); // Quité setGuests
 
   return (
     <nav className="navbar">

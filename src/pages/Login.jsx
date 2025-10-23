@@ -1,48 +1,55 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../config/supabaseClient';
-import bcrypt from 'bcryptjs';
-import './Login.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../config/supabaseClient";
+import bcrypt from "bcryptjs";
+import "./Login.css";
 
 const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       // Buscar usuario por email e incluir el rol con JOIN
       const { data: usuarios, error: queryError } = await supabase
-        .from('usuarios')
-        .select(`
+        .from("usuarios")
+        .select(
+          `
           *,
           roles (
             id_rol,
             nombre
           )
-        `)
-        .eq('email', email)
+        `
+        )
+        .eq("email", email)
         .single();
 
       if (queryError) {
-        throw new Error('Email o contraseña incorrectos');
+        throw new Error("Email o contraseña incorrectos");
       }
 
       if (usuarios.esta_bloqueado) {
-        throw new Error('Tu cuenta ha sido bloqueada. Contacta al administrador.');
+        throw new Error(
+          "Tu cuenta ha sido bloqueada. Contacta al administrador."
+        );
       }
 
-      const isPasswordValid = await bcrypt.compare(password, usuarios.password_hash);
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        usuarios.password_hash
+      );
 
       if (!isPasswordValid) {
-        throw new Error('Email o contraseña incorrectos');
+        throw new Error("Email o contraseña incorrectos");
       }
 
       const userSession = {
@@ -51,16 +58,15 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
         email: usuarios.email,
         rol: usuarios.roles.nombre, // Obtener el nombre del rol desde la tabla roles
         id_rol: usuarios.id_rol,
-        telefono: usuarios.telefono
+        telefono: usuarios.telefono,
       };
-      
-      localStorage.setItem('user', JSON.stringify(userSession));
 
-      console.log('Login exitoso:', userSession);
-      
+      localStorage.setItem("user", JSON.stringify(userSession));
+
+      console.log("Login exitoso:", userSession);
+
       onClose();
-      navigate('/dashboard');
-
+      navigate("/dashboard");
     } catch (error) {
       setError(error.message);
     } finally {
@@ -73,7 +79,9 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>✕</button>
+        <button className="modal-close" onClick={onClose}>
+          ✕
+        </button>
 
         <div className="modal-layout">
           <div className="login-section">
@@ -100,7 +108,7 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
                 <label htmlFor="password">CONTRASEÑA:</label>
                 <div className="password-input-wrapper">
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     placeholder="Contraseña"
                     value={password}
@@ -112,28 +120,46 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
                     className="toggle-password"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                    {showPassword ? "👁️" : "👁️‍🗨️"}
                   </button>
                 </div>
               </div>
 
-              {error && <p style={{ color: 'red', fontSize: '14px', marginTop: '10px' }}>{error}</p>}
+              {error && (
+                <p
+                  style={{ color: "red", fontSize: "14px", marginTop: "10px" }}
+                >
+                  {error}
+                </p>
+              )}
 
-              <button type="submit" className="submit-button" disabled={loading}>
-                {loading ? 'Cargando...' : 'Continuar'}
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={loading}
+              >
+                {loading ? "Cargando..." : "Continuar"}
               </button>
 
-              <a href="#" className="forgot-password">
+              <button
+                type="button"
+                className="forgot-password"
+                onClick={() => alert("Funcionalidad próximamente")}
+              >
                 ¿Has Olvidado La Contraseña?
-              </a>
+              </button>
 
               <div className="signup-section">
                 <span>¿No tienes una cuenta? </span>
-                <button 
+                <button
                   type="button"
-                  onClick={onSwitchToRegister} 
+                  onClick={onSwitchToRegister}
                   className="signup-link"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
                 >
                   Registrarse
                 </button>
@@ -142,8 +168,8 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
           </div>
 
           <div className="image-section">
-            <img 
-              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600" 
+            <img
+              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600"
               alt="Restaurante"
             />
           </div>
