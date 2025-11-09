@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+import './index.css';
 import Navbar from './components/Navbar';
+import Footer from './components/footer'; // 👈 Cambiar a minúscula
 import HeroCarousel from './components/HeroCarousel';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -23,23 +25,27 @@ function AppContent() {
   };
 
   return (
-    <div className="App">
+    <div className="App flex flex-col min-h-screen">
       <Navbar onLoginClick={() => setIsLoginOpen(true)} />
       
-      <Routes>
-        <Route path="/" element={<HeroCarousel />} />
-        
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } 
-        />
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<HeroCarousel />} />
+          
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
 
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </main>
+
+      <Footer />
 
       <Login 
         isOpen={isLoginOpen} 
