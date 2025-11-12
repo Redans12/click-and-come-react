@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import './App.css';
-import Navbar from './components/Navbar';
-import HeroCarousel from './components/HeroCarousel';
-import ListaRestaurantes from './components/ListaRestaurantes';
-import Footer from './components/footer';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import { restauranteService } from './services/restauranteService';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import HeroCarousel from "./components/HeroCarousel";
+import ListaRestaurantes from "./components/ListaRestaurantes";
+import Footer from "./components/footer";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { restauranteService } from "./services/restauranteService";
+import SeccionRestaurantes from './components/SeccionRestaurantes';
 
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -25,8 +26,8 @@ function App() {
         setRestaurantes(data);
         setError(null);
       } catch (err) {
-        console.error('Error cargando restaurantes:', err);
-        setError('No se pudieron cargar los restaurantes');
+        console.error("Error cargando restaurantes:", err);
+        setError("No se pudieron cargar los restaurantes");
       } finally {
         setLoading(false);
       }
@@ -49,16 +50,16 @@ function App() {
     <Router>
       <div className="App flex flex-col min-h-screen">
         <Navbar onLoginClick={() => setIsLoginOpen(true)} />
-        
+
         <main className="flex-grow">
           <HeroCarousel />
-          
+
           {/* Sección de Restaurantes */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-8">
               Restaurantes Disponibles
             </h2>
-            
+
             {loading && (
               <div className="text-center py-12">
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
@@ -82,17 +83,38 @@ function App() {
               <ListaRestaurantes restaurantes={restaurantes} />
             )}
           </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <SeccionRestaurantes
+              titulo="Recomendado para ti"
+              restaurantes={restaurantes.slice(0, 5)}
+              onVerTodo={() => console.log("Ver todos los recomendados")}
+            />
+
+            <SeccionRestaurantes
+              titulo="Reservar para esta noche"
+              icono="🌙"
+              restaurantes={restaurantes.slice(0, 5)}
+              onVerTodo={() => console.log("Ver todas las reservas nocturnas")}
+            />
+
+            <SeccionRestaurantes
+              titulo="Nuevo"
+              restaurantes={restaurantes.slice(0, 5)}
+              onVerTodo={() => console.log("Ver todos los nuevos")}
+            />
+          </div>
         </main>
 
         <Footer />
 
-        <Login 
-          isOpen={isLoginOpen} 
+        <Login
+          isOpen={isLoginOpen}
           onClose={() => setIsLoginOpen(false)}
           onSwitchToRegister={handleSwitchToRegister}
         />
-        <Register 
-          isOpen={isRegisterOpen} 
+        <Register
+          isOpen={isRegisterOpen}
           onClose={() => setIsRegisterOpen(false)}
           onSwitchToLogin={handleSwitchToLogin}
         />
