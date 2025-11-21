@@ -22,8 +22,6 @@ const BotonLike = ({ restaurante }) => {
 };
 
 // Componente de Botón Tres Puntos 
-// ESTO SOLO ES UNA PRUEBA Y TIENE VALORES CONSTANTES, ES TODO UN COMPONENTE APARTE Y SOLO
-// SE LLAMA AQUO (SE LLAMA COMO EL DE HORARIOS MAS ABAJO) REVISA EL DE LARAVEL PARA VER LA LLAMADA
 const BotonTresPuntos = ({ restaurante, onVerDetalle }) => {
   const [showMenu, setShowMenu] = useState(false);
 
