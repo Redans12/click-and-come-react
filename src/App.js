@@ -70,25 +70,25 @@ function App() {
           <Route
             path="/admin/restaurantes/crear"
             element={
-              <ProtectedRoute>
+              //<ProtectedRoute>
               <CrearRestaurante />
-              </ProtectedRoute>
+              //</ProtectedRoute>
             }
           />
           <Route
             path="/admin/dashboard"
             element={
-              <ProtectedRoute>
+              //<ProtectedRoute>
               <AdminDashboard />
-              </ProtectedRoute>
+              //</ProtectedRoute>
             }
           />
           <Route
             path="/admin/restaurantes/:id/editar"
             element={
-              <ProtectedRoute>
+              //<ProtectedRoute>
                 <EditarRestaurante />
-              </ProtectedRoute>
+              //</ProtectedRoute>
             }
           />
           <Route
