@@ -33,24 +33,28 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
 
-      // Obtener restaurantes
-      const restaurantesData = await restauranteService.getRestaurantes();
-      setRestaurantes(restaurantesData);
+      // 1. Obtener restaurantes y asegurar variable segura
+      const rawRestaurantes = await restauranteService.getRestaurantes();
+      const safeRestaurantes = rawRestaurantes || []; 
+      setRestaurantes(safeRestaurantes);
 
-      // Obtener usuarios
-      const { data: usuariosData } = await supabase
+      // 2. Obtener usuarios y asegurar variable segura
+      const { data: rawUsuarios } = await supabase
         .from("usuarios")
         .select("*")
         .order("created_at", { ascending: false });
-      setUsuarios(usuariosData || []);
+      
+      const safeUsuarios = rawUsuarios || [];
+      setUsuarios(safeUsuarios);
 
-      // Actualizar estadísticas
+      // 3. Actualizar estadísticas usando las variables SEGURAS
       setStats({
-        totalUsuarios: usuariosData?.length || 0,
-        totalRestaurantes: restaurantesData.length,
+        totalUsuarios: safeUsuarios.length, 
+        totalRestaurantes: safeRestaurantes.length, // Ahora esto ya no fallará
         reservasHoy: 0,
         balance: 0,
       });
+
     } catch (error) {
       console.error("Error cargando datos del dashboard:", error);
     } finally {
@@ -80,7 +84,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const filteredRestaurantes = restaurantes.filter((r) =>
+  const filteredRestaurantes = (restaurantes || []).filter((r) =>
     r.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

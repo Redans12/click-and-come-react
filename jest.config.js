@@ -1,15 +1,19 @@
 module.exports = {
-testEnvironment: 'jest-environment-jsdom',
- // setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  testEnvironment: 'jest-environment-jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^@/(.*)$': '<rootDir>/src/$1'
   },
-  /*transform: {
-    '^.+\\.jsx?$': 'babel-jest',
-  },*/
+  transform: {
+    '^.+\\.(js|jsx)$': 'babel-jest',
+  },
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)',
     '**/?(*.)+(spec|test).[jt]s?(x)'
-  ]
+  ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-router-dom|react-router|lucide-react)/)',
+  ],
+  moduleDirectories: ['node_modules', 'src'],
 };
