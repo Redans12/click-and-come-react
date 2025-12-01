@@ -58,6 +58,8 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
       const telefonoCompleto = `${formData.countryCode} ${formData.phone}`.trim();
 
       // Insertar usuario en la base de datos
+      // NOTA: Se eliminó id_rol ya que no existe en la tabla
+      // El campo 'rol' tiene un valor por defecto 'cliente' en la BD
       const { data, error } = await supabase
         .from('usuarios')
         .insert([
@@ -66,7 +68,7 @@ const Register = ({ isOpen, onClose, onSwitchToLogin }) => {
             email: formData.email,
             password_hash: passwordHash,
             telefono: telefonoCompleto,
-            id_rol: 2 // 2 = cliente
+            rol: 'cliente' // Especificamos explícitamente el rol como 'cliente'
           }
         ])
         .select();

@@ -18,13 +18,6 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CrearRestaurante from "./pages/admin/CrearRestaurante";
 import EditarRestaurante from './pages/admin/EditarRestaurante';
 
-// Agregar ProtectedRoute básico (reemplaza la lógica de auth según tu app)
-const ProtectedRoute = ({ children }) => {
-  // Ejemplo: comprobar token en localStorage; sustituir por tu auth real
-  const isAuthenticated = Boolean(localStorage.getItem("authToken"));
-  return isAuthenticated ? children : <Navigate to="/" replace />;
-};
-
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -67,30 +60,12 @@ function App() {
         <Navbar onLoginClick={() => setIsLoginOpen(true)} />
 
         <Routes>
-          <Route
-            path="/admin/restaurantes/crear"
-            element={
-              //<ProtectedRoute>
-              <CrearRestaurante />
-              //</ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/dashboard"
-            element={
-              //<ProtectedRoute>
-              <AdminDashboard />
-              //</ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/restaurantes/:id/editar"
-            element={
-              //<ProtectedRoute>
-                <EditarRestaurante />
-              //</ProtectedRoute>
-            }
-          />
+          {/* ✅ RUTAS DE ADMIN - SIN PROTECCIÓN (para desarrollo) */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/restaurantes/crear" element={<CrearRestaurante />} />
+          <Route path="/admin/restaurantes/:id/editar" element={<EditarRestaurante />} />
+
+          {/* RUTA PRINCIPAL */}
           <Route
             path="/*"
             element={

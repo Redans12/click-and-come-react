@@ -7,6 +7,7 @@ import {
   DollarSign,
   Plus,
   Search,
+  Filter,
 } from "lucide-react";
 import { supabase } from "../../config/supabaseClient";
 import { restauranteService } from "../../services/restauranteService";
@@ -23,6 +24,7 @@ const AdminDashboard = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filtroEstado, setFiltroEstado] = useState("todos"); // 'todos', 'activos', 'inactivos'
 
   // Cargar datos
   useEffect(() => {
@@ -33,28 +35,33 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
 
-      // 1. Obtener restaurantes y asegurar variable segura
-      const rawRestaurantes = await restauranteService.getRestaurantes();
-      const safeRestaurantes = rawRestaurantes || []; 
+      // 1. Obtener TODOS los restaurantes (activos e inactivos)
+      const { data: rawRestaurantes, error: restError } = await supabase
+        .from("restaurantes")
+        .select("*")
+        .order("fecha_creacion", { ascending: false });
+
+      if (restError) throw restError;
+
+      const safeRestaurantes = rawRestaurantes || [];
       setRestaurantes(safeRestaurantes);
 
-      // 2. Obtener usuarios y asegurar variable segura
+      // 2. Obtener usuarios
       const { data: rawUsuarios } = await supabase
         .from("usuarios")
         .select("*")
         .order("created_at", { ascending: false });
-      
+
       const safeUsuarios = rawUsuarios || [];
       setUsuarios(safeUsuarios);
 
-      // 3. Actualizar estadísticas usando las variables SEGURAS
+      // 3. Actualizar estadísticas
       setStats({
-        totalUsuarios: safeUsuarios.length, 
-        totalRestaurantes: safeRestaurantes.length, // Ahora esto ya no fallará
+        totalUsuarios: safeUsuarios.length,
+        totalRestaurantes: safeRestaurantes.length,
         reservasHoy: 0,
         balance: 0,
       });
-
     } catch (error) {
       console.error("Error cargando datos del dashboard:", error);
     } finally {
@@ -84,9 +91,21 @@ const AdminDashboard = () => {
     }
   };
 
-  const filteredRestaurantes = (restaurantes || []).filter((r) =>
-    r.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filtrar restaurantes por búsqueda y estado
+  const filteredRestaurantes = (restaurantes || [])
+    .filter((r) => r.nombre.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((r) => {
+      if (filtroEstado === "activos") return r.activo === true;
+      if (filtroEstado === "inactivos") return r.activo === false;
+      return true; // 'todos'
+    });
+
+  // Contar restaurantes por estado
+  const contadores = {
+    todos: restaurantes.length,
+    activos: restaurantes.filter((r) => r.activo === true).length,
+    inactivos: restaurantes.filter((r) => r.activo === false).length,
+  };
 
   if (loading) {
     return (
@@ -147,7 +166,9 @@ const AdminDashboard = () => {
               {stats.totalRestaurantes}
             </h3>
             <p className="text-red-100 text-sm">Total Restaurantes</p>
-            <p className="text-xs text-red-200 mt-2">3 nuevos esta semana</p>
+            <p className="text-xs text-red-200 mt-2">
+              {contadores.activos} activos, {contadores.inactivos} inactivos
+            </p>
           </div>
 
           {/* Reservas Hoy */}
@@ -189,7 +210,8 @@ const AdminDashboard = () => {
                   Gestión de Restaurantes
                 </h2>
                 <p className="text-sm text-gray-500">
-                  {restaurantes.length} restaurantes registrados
+                  {filteredRestaurantes.length} restaurantes{" "}
+                  {filtroEstado !== "todos" && `(${filtroEstado})`}
                 </p>
               </div>
             </div>
@@ -214,12 +236,56 @@ const AdminDashboard = () => {
             />
           </div>
 
+          {/* Filtros de Estado */}
+          <div className="flex items-center gap-3 mb-6">
+            <Filter className="w-5 h-5 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700">
+              Filtrar por estado:
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setFiltroEstado("todos")}
+                className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
+                  filtroEstado === "todos"
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                Todos ({contadores.todos})
+              </button>
+              <button
+                onClick={() => setFiltroEstado("activos")}
+                className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
+                  filtroEstado === "activos"
+                    ? "bg-green-500 text-white"
+                    : "bg-green-50 text-green-700 hover:bg-green-100"
+                }`}
+              >
+                ✓ Activos ({contadores.activos})
+              </button>
+              <button
+                onClick={() => setFiltroEstado("inactivos")}
+                className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
+                  filtroEstado === "inactivos"
+                    ? "bg-red-500 text-white"
+                    : "bg-red-50 text-red-700 hover:bg-red-100"
+                }`}
+              >
+                ✕ Inactivos ({contadores.inactivos})
+              </button>
+            </div>
+          </div>
+
           {/* Grid de Restaurantes */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredRestaurantes.map((restaurante) => (
               <div
                 key={restaurante.id_restaurante}
-                className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition"
+                className={`border rounded-lg overflow-hidden hover:shadow-lg transition ${
+                  !restaurante.activo
+                    ? "border-gray-300 bg-gray-50 opacity-75"
+                    : "border-gray-200"
+                }`}
               >
                 {/* Imagen */}
                 <div className="relative h-48">
@@ -235,10 +301,10 @@ const AdminDashboard = () => {
                     className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${
                       restaurante.activo
                         ? "bg-green-500 text-white"
-                        : "bg-gray-500 text-white"
+                        : "bg-red-500 text-white"
                     }`}
                   >
-                    {restaurante.activo ? "Activo" : "Inactivo"}
+                    {restaurante.activo ? "✓ Activo" : "✕ Inactivo"}
                   </div>
                 </div>
 
@@ -268,7 +334,11 @@ const AdminDashboard = () => {
                     </button>
                     <button
                       onClick={() => handleToggleActive(restaurante)}
-                      className="flex-1 bg-red-100 text-red-600 py-2 rounded-lg hover:bg-red-200 transition font-medium text-sm"
+                      className={`flex-1 py-2 rounded-lg transition font-medium text-sm ${
+                        restaurante.activo
+                          ? "bg-red-100 text-red-600 hover:bg-red-200"
+                          : "bg-green-100 text-green-600 hover:bg-green-200"
+                      }`}
                     >
                       {restaurante.activo ? "🚫 Desactivar" : "✅ Activar"}
                     </button>
@@ -277,6 +347,21 @@ const AdminDashboard = () => {
               </div>
             ))}
           </div>
+
+          {/* Mensaje si no hay resultados */}
+          {filteredRestaurantes.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              <Utensils className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg font-medium">
+                No se encontraron restaurantes
+              </p>
+              <p className="text-sm">
+                {searchTerm
+                  ? "Intenta con otro término de búsqueda"
+                  : "Comienza añadiendo tu primer restaurante"}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Gestión de Usuarios */}
@@ -345,18 +430,12 @@ const AdminDashboard = () => {
                     <td className="py-4 px-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          usuario.id_rol === 1
+                          usuario.rol === "admin"
                             ? "bg-purple-100 text-purple-700"
-                            : usuario.id_rol === 2
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-orange-100 text-orange-700"
+                            : "bg-blue-100 text-blue-700"
                         }`}
                       >
-                        {usuario.id_rol === 1
-                          ? "Admin"
-                          : usuario.id_rol === 2
-                          ? "Cliente"
-                          : "Dueño"}
+                        {usuario.rol === "admin" ? "Admin" : "Cliente"}
                       </span>
                     </td>
                     <td className="py-4 px-4">

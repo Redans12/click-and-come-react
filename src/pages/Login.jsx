@@ -19,30 +19,24 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
     setError('');
 
     try {
-      // Buscar usuario por email con JOIN a la tabla roles
-      const { data: usuarios, error: queryError } = await supabase
+      // Buscar usuario por email
+      const { data: usuario, error: queryError } = await supabase
         .from('usuarios')
-        .select(`
-          *,
-          roles (
-            id_rol,
-            nombre
-          )
-        `)
+        .select('id_usuario, nombre, email, password_hash, telefono, rol, esta_bloqueado')
         .eq('email', email)
         .single();
 
-      if (queryError) {
+      if (queryError || !usuario) {
         throw new Error('Email o contraseña incorrectos');
       }
 
       // Verificar si el usuario está bloqueado
-      if (usuarios.esta_bloqueado) {
+      if (usuario.esta_bloqueado) {
         throw new Error('Tu cuenta ha sido bloqueada. Contacta al administrador.');
       }
 
       // Comparar contraseña
-      const isPasswordValid = await bcrypt.compare(password, usuarios.password_hash);
+      const isPasswordValid = await bcrypt.compare(password, usuario.password_hash);
 
       if (!isPasswordValid) {
         throw new Error('Email o contraseña incorrectos');
@@ -50,20 +44,26 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
 
       // Login exitoso - Guardar usuario en localStorage
       const userSession = {
-        id_usuario: usuarios.id_usuario,
-        nombre: usuarios.nombre,
-        email: usuarios.email,
-        rol: usuarios.roles.nombre,
-        id_rol: usuarios.id_rol
+        id_usuario: usuario.id_usuario,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        rol: usuario.rol,
+        telefono: usuario.telefono
       };
       
       localStorage.setItem('user', JSON.stringify(userSession));
 
       console.log('Login exitoso:', userSession);
       
-      // Cerrar modal y redirigir
+      // Cerrar modal
       onClose();
-      navigate('/dashboard');
+
+      // 🎯 Redirigir según el rol del usuario
+      if (usuario.rol === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
 
     } catch (error) {
       setError(error.message);
