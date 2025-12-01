@@ -16,7 +16,15 @@ import { restauranteService } from "./services/restauranteService";
 import SeccionRestaurantes from "./components/SeccionRestaurantes";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import CrearRestaurante from "./pages/admin/CrearRestaurante";
-import EditarRestaurante from './pages/admin/EditarRestaurante';
+import EditarRestaurante from "./pages/admin/EditarRestaurante";
+import OwnerDashboard from "./pages/owner/OwnerDashboard";
+
+// Agregar ProtectedRoute básico (reemplaza la lógica de auth según tu app)
+const ProtectedRoute = ({ children }) => {
+  // Ejemplo: comprobar token en localStorage; sustituir por tu auth real
+  const isAuthenticated = Boolean(localStorage.getItem("authToken"));
+  return isAuthenticated ? children : <Navigate to="/" replace />;
+};
 
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -60,12 +68,41 @@ function App() {
         <Navbar onLoginClick={() => setIsLoginOpen(true)} />
 
         <Routes>
-          {/* ✅ RUTAS DE ADMIN - SIN PROTECCIÓN (para desarrollo) */}
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/restaurantes/crear" element={<CrearRestaurante />} />
-          <Route path="/admin/restaurantes/:id/editar" element={<EditarRestaurante />} />
+          <Route
+            path="/owner/*"
+            element={
+              //<ProtectedRoute allowedRoles={["owner"]}>
+                <Routes>
+                  <Route path="dashboard" element={<OwnerDashboard />} />
+                </Routes>
+              //</ProtectedRoute>
+            }
+          />
 
-          {/* RUTA PRINCIPAL */}
+          <Route
+            path="/admin/restaurantes/crear"
+            element={
+              //<ProtectedRoute>
+              <CrearRestaurante />
+              //</ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              //<ProtectedRoute>
+              <AdminDashboard />
+              //</ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/restaurantes/:id/editar"
+            element={
+              //<ProtectedRoute>
+              <EditarRestaurante />
+              //</ProtectedRoute>
+            }
+          />
           <Route
             path="/*"
             element={
