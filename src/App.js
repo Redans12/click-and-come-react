@@ -18,13 +18,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CrearRestaurante from "./pages/admin/CrearRestaurante";
 import EditarRestaurante from "./pages/admin/EditarRestaurante";
 import OwnerDashboard from "./pages/owner/OwnerDashboard";
-
-// Agregar ProtectedRoute básico (reemplaza la lógica de auth según tu app)
-const ProtectedRoute = ({ children }) => {
-  // Ejemplo: comprobar token en localStorage; sustituir por tu auth real
-  const isAuthenticated = Boolean(localStorage.getItem("authToken"));
-  return isAuthenticated ? children : <Navigate to="/" replace />;
-};
+import ClienteDashboard from "./pages/ClienteDashboard";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -69,12 +64,20 @@ function App() {
 
         <Routes>
           <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["cliente"]}>
+                <ClienteDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/owner/*"
             element={
               //<ProtectedRoute allowedRoles={["owner"]}>
-                <Routes>
-                  <Route path="dashboard" element={<OwnerDashboard />} />
-                </Routes>
+              <Routes>
+                <Route path="dashboard" element={<OwnerDashboard />} />
+              </Routes>
               //</ProtectedRoute>
             }
           />
