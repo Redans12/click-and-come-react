@@ -4,6 +4,7 @@ import { supabase } from '../config/supabaseClient';
 import bcrypt from 'bcryptjs';
 import './Login.css';
 import { IoClose, IoEyeOutline, IoEyeOffOutline, IoArrowBack } from 'react-icons/io5';
+import { useAuth } from '../hooks/useAuth'; // 🔥 AGREGAR ESTO
 
 const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth(); // 🔥 AGREGAR ESTO
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,12 +39,12 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
 
       // Comparar contraseña
       const isPasswordValid = await bcrypt.compare(password, usuario.password_hash);
-
+      
       if (!isPasswordValid) {
         throw new Error('Email o contraseña incorrectos');
       }
 
-      // Login exitoso - Guardar usuario en localStorage
+      // Login exitoso - Guardar usuario
       const userSession = {
         id_usuario: usuario.id_usuario,
         nombre: usuario.nombre,
@@ -51,23 +53,27 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
         telefono: usuario.telefono
       };
       
-      localStorage.setItem('user', JSON.stringify(userSession));
-
-      console.log('Login exitoso:', userSession);
+      // 🔥 CAMBIO IMPORTANTE: Usar login() del hook en lugar de localStorage directamente
+      console.log('✅ Login exitoso - Usuario:', userSession);
+      login(userSession); // 🔥 ESTO ACTUALIZA EL NAVBAR AUTOMÁTICAMENTE
       
       // Cerrar modal
       onClose();
-
+      
       // 🎯 Redirigir según el rol del usuario
       if (usuario.rol === 'admin') {
         navigate('/admin/dashboard');
-      } else {
+      } else if (usuario.rol === 'owner') {
+        navigate('/owner/dashboard');
+      } else if (usuario.rol === 'cliente') {
         navigate('/dashboard');
+      } else {
+        navigate('/');
       }
-
+      
     } catch (error) {
+      console.error('❌ Error en login:', error);
       setError(error.message);
-      console.error('Error en login:', error);
     } finally {
       setLoading(false);
     }
@@ -81,18 +87,17 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
         <button className="back-button" onClick={onClose}>
           <IoArrowBack />
         </button>
-
         <button className="modal-close" onClick={onClose}>
           <IoClose />
         </button>
-
+        
         <div className="login-container">
           <div className="logo-section">
             <div className="logo-placeholder">LOGO</div>
           </div>
-
+          
           <h2 className="login-title">Inicia sesión:</h2>
-
+          
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
               <label htmlFor="email">DIRECCIÓN DE EMAIL*</label>
