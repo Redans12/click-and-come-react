@@ -3,173 +3,189 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../config/supabaseClient';
 import bcrypt from 'bcryptjs';
 import './Login.css';
-import { IoClose, IoEyeOutline, IoEyeOffOutline, IoArrowBack } from 'react-icons/io5';
+import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
+import { FaUserCircle, FaGoogle, FaFacebook } from 'react-icons/fa'; 
 
 const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
 
-    try {
-      // Buscar usuario por email
-      const { data: usuario, error: queryError } = await supabase
-        .from('usuarios')
-        .select('id_usuario, nombre, email, password_hash, telefono, rol, esta_bloqueado')
-        .eq('email', email)
-        .single();
-
-      if (queryError || !usuario) {
-        throw new Error('Email o contraseña incorrectos');
-      }
-
-      // Verificar si el usuario está bloqueado
-      if (usuario.esta_bloqueado) {
-        throw new Error('Tu cuenta ha sido bloqueada. Contacta al administrador.');
-      }
-
-      // Comparar contraseña
-      const isPasswordValid = await bcrypt.compare(password, usuario.password_hash);
-
-      if (!isPasswordValid) {
-        throw new Error('Email o contraseña incorrectos');
-      }
-
-      // Login exitoso - Guardar usuario en localStorage
-      const userSession = {
-        id_usuario: usuario.id_usuario,
-        nombre: usuario.nombre,
-        email: usuario.email,
-        rol: usuario.rol,
-        telefono: usuario.telefono
-      };
+        try {
+            // ... (Lógica de autenticación con Supabase y bcrypt) ...
+            const { data: usuario, error: queryError } = await supabase
+              .from('usuarios')
+              .select('id_usuario, nombre, email, password_hash, telefono, rol, esta_bloqueado')
+              .eq('email', email)
+              .single();
       
-      localStorage.setItem('user', JSON.stringify(userSession));
-
-      console.log('Login exitoso:', userSession);
+            if (queryError || !usuario) {
+              throw new Error('Email o contraseña incorrectos');
+            }
       
-      // Cerrar modal
-      onClose();
+            if (usuario.esta_bloqueado) {
+              throw new Error('Tu cuenta ha sido bloqueada. Contacta al administrador.');
+            }
+      
+            const isPasswordValid = await bcrypt.compare(password, usuario.password_hash);
+      
+            if (!isPasswordValid) {
+              throw new Error('Email o contraseña incorrectos');
+            }
+      
+            const userSession = {
+              id_usuario: usuario.id_usuario,
+              nombre: usuario.nombre,
+              email: usuario.email,
+              rol: usuario.rol,
+              telefono: usuario.telefono
+            };
+            
+            localStorage.setItem('user', JSON.stringify(userSession));
+            onClose();
 
-      // 🎯 Redirigir según el rol del usuario
-      if (usuario.rol === 'admin') {
-        navigate('/admin/dashboard');
-      } else {
-        navigate('/dashboard');
-      }
+            if (usuario.rol === 'admin') {
+              navigate('/admin/dashboard');
+            } else {
+              navigate('/dashboard');
+            }
 
-    } catch (error) {
-      setError(error.message);
-      console.error('Error en login:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        } catch (error) {
+            setError(error.message || 'Error al iniciar sesión');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="login-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="back-button" onClick={onClose}>
-          <IoArrowBack />
-        </button>
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="login-modal-content" onClick={(e) => e.stopPropagation()}>
+                
+                {/* HEADER CON GRADIENTE */}
+                <div className="card-header-gradient">
+                    <div className="header-icon-wrapper">
+                        <FaUserCircle className="header-icon" /> 
+                    </div>
+                    <h2 className="header-title">
+                        ¡Bienvenido!
+                    </h2>
+                    <p className="header-subtitle">
+                        Inicia sesión para continuar
+                    </p>
+                </div>
+                
+                {/* CONTENIDO PRINCIPAL / FORMULARIO */}
+                <div className="login-container">
+                    
+                    <form onSubmit={handleSubmit} className="login-form">
+                        
+                        {/* Campo Email */}
+                        <div className="form-group">
+                            <label htmlFor="email">DIRECCIÓN DE EMAIL</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="tu@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
 
-        <button className="modal-close" onClick={onClose}>
-          <IoClose />
-        </button>
+                        {/* Campo Contraseña */}
+                        <div className="form-group">
+                            <label htmlFor="password">CONTRASEÑA</label>
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    id="password"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="toggle-password"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                                </button>
+                            </div>
+                        </div>
 
-        <div className="login-container">
-          <div className="logo-section">
-            <div className="logo-placeholder">LOGO</div>
-          </div>
+                        {error && (
+                            <div className="error-message">
+                                {error}
+                            </div>
+                        )}
+                        
+                        {/* Botón de Submit */}
+                        <button type="submit" className="submit-button" disabled={loading}>
+                            {loading ? 'Cargando...' : 'Iniciar Sesión'}
+                        </button>
+                        
+                        {/* Link de Contraseña Olvidada */}
+                        <div style={{ textAlign: 'center', marginTop: '5px' }}>
+                            <button 
+                                type="button" 
+                                className="forgot-password-link"
+                                onClick={() => alert('Funcionalidad de recuperación próximamente')}
+                            >
+                                ¿Olvidaste tu contraseña?
+                            </button>
+                        </div>
+                        
+                        {/* Divider */}
+                        <div style={{ margin: '20px 0', position: 'relative', textAlign: 'center' }}>
+                            <div className="divider"></div>
+                            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '0 15px', fontSize: '14px', color: '#6b7280' }}>
+                                O continúa con
+                            </div>
+                        </div>
 
-          <h2 className="login-title">Inicia sesión:</h2>
+                        {/* Opciones Sociales */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+                            <button type="button" className="social-button">
+                                <FaGoogle className="social-button-icon" style={{ color: '#EA4335' }} />
+                                <span style={{ fontSize: '14px', fontWeight: '500', color: '#374151' }}>Google</span>
+                            </button>
+                            <button type="button" className="social-button">
+                                <FaFacebook className="social-button-icon" style={{ color: '#1877F2' }} />
+                                <span style={{ fontSize: '14px', fontWeight: '500', color: '#374151' }}>Facebook</span>
+                            </button>
+                        </div>
 
-          <form onSubmit={handleSubmit} className="login-form">
-            <div className="form-group">
-              <label htmlFor="email">DIRECCIÓN DE EMAIL*</label>
-              <input
-                type="email"
-                id="email"
-                placeholder="Dirección de email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+                    </form>
+                </div>
+                
+                {/* FOOTER DE LA TARJETA */}
+                <div className="card-footer">
+                    <p className="text-sm text-gray-600">
+                        ¿No tienes una cuenta?
+                        <button 
+                            type="button"
+                            className="card-footer-link"
+                            onClick={onSwitchToRegister}
+                        >
+                            Regístrate gratis
+                        </button>
+                    </p>
+                </div>
+
             </div>
-
-            <div className="form-group">
-              <label htmlFor="password">CONTRASEÑA*</label>
-              <div className="password-input-wrapper">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  placeholder="Contraseña"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  className="toggle-password"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <div className="error-message" style={{ 
-                color: '#ff4757', 
-                fontSize: '14px', 
-                marginTop: '10px',
-                padding: '10px',
-                backgroundColor: '#ffe5e8',
-                borderRadius: '8px',
-                textAlign: 'center'
-              }}>
-                {error}
-              </div>
-            )}
-
-            <button type="submit" className="submit-button" disabled={loading}>
-              {loading ? 'Cargando...' : 'Continuar'}
-            </button>
-
-            <button 
-              type="button" 
-              className="forgot-password-link"
-              onClick={() => alert('Funcionalidad de recuperación próximamente')}
-            >
-              ¿Has Olvidado La Contraseña?
-            </button>
-
-            <div className="divider"></div>
-
-            <div className="signup-section">
-              <span>¿No tienes una cuenta? </span>
-              <button 
-                type="button"
-                className="signup-link-button"
-                onClick={onSwitchToRegister}
-              >
-                Registrarse
-              </button>
-            </div>
-          </form>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Login;

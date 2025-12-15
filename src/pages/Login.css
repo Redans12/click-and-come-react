@@ -1,3 +1,7 @@
+/* ==============================================
+   ESTILOS GENERALES Y LAYOUT
+   ============================================== */
+
 /* Modal Overlay */
 .modal-overlay {
   position: fixed;
@@ -5,7 +9,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+ background: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,135 +17,123 @@
   padding: 20px;
 }
 
+/* Contenedor Principal / Tarjeta de Login */
 .login-modal-content {
-  background: white;
-  border-radius: 12px;
-  max-width: 600px;
+  background: white; /* FONDO BLANCO */
+  border-radius: 16px;
+  max-width: 440px; 
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow-y: auto; 
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding: 50px 60px;
-}
-
-.back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #999;
-  padding: 5px;
-  transition: color 0.3s;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: 0; 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 
-.back-button:hover {
-  color: #333;
+/* Ocultamos botones de cierre antiguos */
+.back-button, .modal-close {
+  display: none; 
 }
 
-.modal-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: white;
-  border: 2px solid #5B8DEF;
-  font-size: 20px;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #5B8DEF;
-  transition: all 0.3s;
-  padding: 0;
-}
 
-.modal-close:hover {
-  background: #5B8DEF;
+/* ==============================================
+   HEADER CON GRADIENTE (Estilo de tarjeta moderna)
+   ============================================== */
+
+.card-header-gradient {
+  background: linear-gradient(to right, #dc2626, #f97316); /* Red-600 a Orange-600 */
+  padding: 30px 40px;
+  text-align: center;
   color: white;
 }
 
+.header-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: white;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.header-icon {
+    width: 32px;
+    height: 32px;
+    color: #dc2626; 
+}
+
+.header-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.header-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+
+/* ==============================================
+   FORMULARIO Y CAMPOS (Alineación)
+   ============================================== */
+
 .login-container {
+  padding: 30px 40px;
   width: 100%;
-}
-
-.logo-section {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.logo-placeholder {
-  color: #999;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.login-title {
-  font-size: 20px;
-  color: #666;
-  margin-bottom: 30px;
-  font-weight: 500;
-  text-align: left;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 20px; 
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px; /* Espacio reducido entre label e input */
+  width: 100%;
 }
 
 .form-group label {
-  font-size: 11px;
-  color: #999;
-  font-weight: 500;
+  text-align: left; /* Alineación del label */
+  font-size: 12px;
+  color: #4b5563;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-bottom: 5px; 
 }
 
 .form-group input {
-  padding: 14px 16px;
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  font-size: 15px;
-  color: #333;
-  transition: all 0.3s ease;
-  background: #FAFAFA;
+  width: 100%;
+  box-sizing: border-box; /* Clave para la alineación horizontal */
+  padding: 12px 16px;
+  border: 1px solid #d1d5db; 
+  border-radius: 8px; 
+  background: white;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #5B8DEF;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
+  border-color: #dc2626; 
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2); 
 }
 
-.form-group input::placeholder {
-  color: #BDBDBD;
-}
-
+/* Wrapper de Contraseña */
 .password-input-wrapper {
   position: relative;
+  width: 100%;
 }
 
 .password-input-wrapper input {
-  width: 100%;
-  padding-right: 45px;
+  padding-right: 45px; /* Espacio para el icono */
 }
 
 .toggle-password {
@@ -157,34 +149,36 @@
   padding: 5px;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .toggle-password:hover {
-  color: #5B8DEF;
+  color: #dc2626;
 }
 
+/* Botón de Submit */
 .submit-button {
-  background: #5B8DEF;
+  width: 100%;
+  background: linear-gradient(to right, #dc2626, #f97316); 
   color: white;
-  border: none;
   padding: 14px;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
+  margin-top: 15px;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
   transition: all 0.3s ease;
-  margin-top: 10px;
 }
 
 .submit-button:hover {
-  background: #4A7BD8;
-  box-shadow: 0 4px 12px rgba(91, 141, 239, 0.3);
+  background: linear-gradient(to right, #b91c1c, #ea580c);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
 }
 
+/* Link de Contraseña Olvidada */
 .forgot-password-link {
   text-align: center;
-  color: #5B8DEF;
+  color: #dc2626; 
   background: none;
   border: none;
   font-size: 14px;
@@ -192,85 +186,72 @@
   font-family: inherit;
   padding: 8px;
   transition: color 0.3s;
+  align-self: center; /* Centrar el botón dentro del flex container */
 }
 
 .forgot-password-link:hover {
-  color: #4A7BD8;
+  color: #b91c1c;
   text-decoration: underline;
 }
 
+/* Separador "O continúa con" */
 .divider {
   width: 100%;
   height: 1px;
-  background: #E0E0E0;
-  margin: 10px 0;
+  background: #e5e7eb;
+  margin: 20px 0;
 }
 
-.signup-section {
+/* Botones Sociales */
+.social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+.social-button:hover {
+  background: #f3f4f6;
+}
+.social-button-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+/* Mensaje de Error */
+.error-message {
+  color: #ff4757; 
+  font-size: 14px; 
+  padding: 10px;
+  background-color: #ffe5e8;
+  border-radius: 8px;
   text-align: center;
-  font-size: 14px;
-  color: #666;
-  padding: 10px 0;
 }
 
-.signup-link-button {
-  background: none;
-  border: none;
-  color: #5B8DEF;
-  font-weight: 600;
+
+/* ==============================================
+   FOOTER DE LA TARJETA
+   ============================================== */
+
+.card-footer {
+  padding: 15px 40px;
+  background: #f9fafb; 
+  border-top: 1px solid #f3f4f6;
+  text-align: center;
+}
+
+.card-footer-link {
+  font-weight: 700;
+  color: #dc2626; 
   cursor: pointer;
-  padding: 0;
-  font-size: inherit;
-  font-family: inherit;
-}
-
-.signup-link-button:hover {
   text-decoration: underline;
-}
-
-/* Scrollbar personalizada */
-.login-modal-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.login-modal-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.login-modal-content::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
-.login-modal-content::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-@media (max-width: 768px) {
-  .login-modal-content {
-    padding: 40px 30px;
-    max-height: 95vh;
-  }
-
-  .login-title {
-    font-size: 18px;
-  }
-}
-
-.forgot-password {
-  text-align: center;
-  color: #4169E1;
-  text-decoration: none;
-  font-size: 13px;
-  margin-top: 5px;
   transition: color 0.3s;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
 }
 
-.forgot-password:hover {
-  text-decoration: underline;
+/* Scrollbar (Opcional, se mantiene del código original) */
+.login-modal-content::-webkit-scrollbar {
+  /* ... */
 }
