@@ -15,10 +15,10 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
   const navigate = useNavigate();
   const { login } = useAuth(); // 🔥 AGREGAR ESTO
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
       // Buscar usuario por email
@@ -79,7 +79,7 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
     }
   };
 
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -111,90 +111,70 @@ const Login = ({ isOpen, onClose, onSwitchToRegister }) => {
               />
             </div>
 
-                        {/* Campo Contraseña */}
-                        <div className="form-group">
-                            <label htmlFor="password">CONTRASEÑA</label>
-                            <div className="password-input-wrapper">
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    id="password"
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    className="toggle-password"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                >
-                                    {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-                                </button>
-                            </div>
-                        </div>
-
-                        {error && (
-                            <div className="error-message">
-                                {error}
-                            </div>
-                        )}
-                        
-                        {/* Botón de Submit */}
-                        <button type="submit" className="submit-button" disabled={loading}>
-                            {loading ? 'Cargando...' : 'Iniciar Sesión'}
-                        </button>
-                        
-                        {/* Link de Contraseña Olvidada */}
-                        <div style={{ textAlign: 'center', marginTop: '5px' }}>
-                            <button 
-                                type="button" 
-                                className="forgot-password-link"
-                                onClick={() => alert('Funcionalidad de recuperación próximamente')}
-                            >
-                                ¿Olvidaste tu contraseña?
-                            </button>
-                        </div>
-                        
-                        {/* Divider */}
-                        <div style={{ margin: '20px 0', position: 'relative', textAlign: 'center' }}>
-                            <div className="divider"></div>
-                            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '0 15px', fontSize: '14px', color: '#6b7280' }}>
-                                O continúa con
-                            </div>
-                        </div>
-
-                        {/* Opciones Sociales */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-                            <button type="button" className="social-button">
-                                <FaGoogle className="social-button-icon" style={{ color: '#EA4335' }} />
-                                <span style={{ fontSize: '14px', fontWeight: '500', color: '#374151' }}>Google</span>
-                            </button>
-                            <button type="button" className="social-button">
-                                <FaFacebook className="social-button-icon" style={{ color: '#1877F2' }} />
-                                <span style={{ fontSize: '14px', fontWeight: '500', color: '#374151' }}>Facebook</span>
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
-                
-                {/* FOOTER DE LA TARJETA */}
-                <div className="card-footer">
-                    <p className="text-sm text-gray-600">
-                        ¿No tienes una cuenta?
-                        <button 
-                            type="button"
-                            className="card-footer-link"
-                            onClick={onSwitchToRegister}
-                        >
-                            Regístrate gratis
-                        </button>
-                    </p>
-                </div>
-
+            <div className="form-group">
+              <label htmlFor="password">CONTRASEÑA*</label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  placeholder="Contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                </button>
+              </div>
             </div>
+
+            {error && (
+              <div className="error-message" style={{ 
+                color: '#ff4757', 
+                fontSize: '14px', 
+                marginTop: '10px',
+                padding: '10px',
+                backgroundColor: '#ffe5e8',
+                borderRadius: '8px',
+                textAlign: 'center'
+              }}>
+                {error}
+              </div>
+            )}
+
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? 'Cargando...' : 'Continuar'}
+            </button>
+
+            <button 
+              type="button" 
+              className="forgot-password-link"
+              onClick={() => alert('Funcionalidad de recuperación próximamente')}
+            >
+              ¿Has Olvidado La Contraseña?
+            </button>
+
+            <div className="divider"></div>
+
+            <div className="signup-section">
+              <span>¿No tienes una cuenta? </span>
+              <button 
+                type="button"
+                className="signup-link-button"
+                onClick={onSwitchToRegister}
+              >
+                Registrarse
+              </button>
+            </div>
+          </form>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Login;

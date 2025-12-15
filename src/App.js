@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
@@ -20,6 +19,7 @@ import EditarRestaurante from "./pages/admin/EditarRestaurante";
 import OwnerDashboard from "./pages/owner/OwnerDashboard";
 import ClienteDashboard from "./pages/ClienteDashboard";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import VistaDetalladaRestaurante from "./components/VistaDetalladaRestaurante";
 
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -27,6 +27,13 @@ function App() {
   const [restaurantes, setRestaurantes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // 🔥 Estado para búsqueda en navbar
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  // 🔥 Estado para mostrar vista detallada desde búsqueda
+  const [restauranteSeleccionado, setRestauranteSeleccionado] = useState(null);
+  const [modalDetalleAbierto, setModalDetalleAbierto] = useState(false);
 
   // Cargar restaurantes desde Supabase
   useEffect(() => {
@@ -47,6 +54,12 @@ function App() {
     fetchRestaurantes();
   }, []);
 
+  // 🔥 Manejar selección de restaurante desde búsqueda
+  const handleRestauranteSelect = (restaurante) => {
+    setRestauranteSeleccionado(restaurante);
+    setModalDetalleAbierto(true);
+  };
+
   const handleSwitchToRegister = () => {
     setIsLoginOpen(false);
     setIsRegisterOpen(true);
@@ -60,7 +73,14 @@ function App() {
   return (
     <Router>
       <div className="App flex flex-col min-h-screen">
-        <Navbar onLoginClick={() => setIsLoginOpen(true)} />
+        {/* 🔥 Navbar con búsqueda dropdown */}
+        <Navbar 
+          onLoginClick={() => setIsLoginOpen(true)}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          restaurantes={restaurantes}
+          onRestauranteSelect={handleRestauranteSelect}
+        />
 
         <Routes>
           <Route
@@ -74,37 +94,23 @@ function App() {
           <Route
             path="/owner/*"
             element={
-              //<ProtectedRoute allowedRoles={["owner"]}>
               <Routes>
                 <Route path="dashboard" element={<OwnerDashboard />} />
               </Routes>
-              //</ProtectedRoute>
             }
           />
 
           <Route
             path="/admin/restaurantes/crear"
-            element={
-              //<ProtectedRoute>
-              <CrearRestaurante />
-              //</ProtectedRoute>
-            }
+            element={<CrearRestaurante />}
           />
           <Route
             path="/admin/dashboard"
-            element={
-              //<ProtectedRoute>
-              <AdminDashboard />
-              //</ProtectedRoute>
-            }
+            element={<AdminDashboard />}
           />
           <Route
             path="/admin/restaurantes/:id/editar"
-            element={
-              //<ProtectedRoute>
-              <EditarRestaurante />
-              //</ProtectedRoute>
-            }
+            element={<EditarRestaurante />}
           />
           <Route
             path="/*"
@@ -113,7 +119,7 @@ function App() {
                 <main className="flex-grow">
                   <HeroCarousel />
 
-                  {/* Sección de Restaurantes */}
+                  {/* Sección de Restaurantes - 🔥 SIN FILTRADO */}
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <h2 className="text-3xl font-bold text-gray-900 mb-8">
                       Restaurantes Disponibles
@@ -140,28 +146,25 @@ function App() {
                       </div>
                     )}
 
+                    {/* 🔥 MOSTRAR TODOS LOS RESTAURANTES (sin filtrar) */}
                     {!loading && !error && restaurantes.length > 0 && (
                       <ListaRestaurantes restaurantes={restaurantes} />
                     )}
                   </div>
 
+                  {/* Secciones adicionales */}
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <SeccionRestaurantes
                       titulo="Recomendado para ti"
                       restaurantes={restaurantes.slice(0, 5)}
-                      onVerTodo={() =>
-                        console.log("Ver todos los recomendados")
-                      }
+                      onVerTodo={() => console.log("Ver todos los recomendados")}
                     />
                     <SeccionRestaurantes
                       titulo="Reservar para esta noche"
                       icono="🌙"
                       restaurantes={restaurantes.slice(0, 5)}
-                      onVerTodo={() =>
-                        console.log("Ver todas las reservas nocturnas")
-                      }
+                      onVerTodo={() => console.log("Ver todas las reservas nocturnas")}
                     />
-
                     <SeccionRestaurantes
                       titulo="Nuevo"
                       restaurantes={restaurantes.slice(0, 5)}
@@ -182,6 +185,18 @@ function App() {
                   onClose={() => setIsRegisterOpen(false)}
                   onSwitchToLogin={handleSwitchToLogin}
                 />
+
+                {/* 🔥 Modal de Vista Detallada desde búsqueda */}
+                {restauranteSeleccionado && (
+                  <VistaDetalladaRestaurante
+                    restaurante={restauranteSeleccionado}
+                    isOpen={modalDetalleAbierto}
+                    onClose={() => {
+                      setModalDetalleAbierto(false);
+                      setRestauranteSeleccionado(null);
+                    }}
+                  />
+                )}
               </>
             }
           />

@@ -1,0 +1,229 @@
+/* ============================================
+   RESTAURANTE CARD - 100% RESPONSIVE
+   ============================================ */
+
+.restaurante-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.restaurante-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   IMAGEN
+   ============================================ */
+.restaurante-card-image {
+  position: relative;
+  width: 100%;
+  padding-top: 66.67%; /* Aspect ratio 3:2 */
+  overflow: hidden;
+  background-color: #f3f4f6;
+}
+
+.restaurante-card-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.restaurante-card:hover .restaurante-card-image img {
+  transform: scale(1.05);
+}
+
+/* Rating badge */
+.restaurante-card-rating {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  padding: 6px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.star-icon {
+  width: 14px;
+  height: 14px;
+  color: #f59e0b;
+  fill: #f59e0b;
+}
+
+.restaurante-card-rating span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ============================================
+   CONTENIDO
+   ============================================ */
+.restaurante-card-content {
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.restaurante-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.restaurante-card-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6b7280;
+  flex-wrap: wrap;
+}
+
+.restaurante-card-cuisine {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.restaurante-card-price {
+  font-weight: 500;
+}
+
+.dot {
+  color: #d1d5db;
+}
+
+.restaurante-card-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: auto;
+}
+
+.location-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .restaurante-card-content {
+    padding: 12px;
+  }
+
+  .restaurante-card-title {
+    font-size: 15px;
+  }
+
+  .restaurante-card-info {
+    font-size: 12px;
+  }
+
+  .restaurante-card-rating {
+    padding: 5px 8px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .star-icon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .restaurante-card-rating span {
+    font-size: 12px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .restaurante-card {
+    border-radius: 10px;
+  }
+
+  .restaurante-card-image {
+    padding-top: 75%; /* Aspect ratio 4:3 en mobile */
+  }
+
+  .restaurante-card-content {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .restaurante-card-title {
+    font-size: 14px;
+  }
+
+  .restaurante-card-info {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .restaurante-card-location {
+    font-size: 11px;
+  }
+
+  .location-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .restaurante-card-rating {
+    padding: 4px 7px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .star-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .restaurante-card-rating span {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .restaurante-card {
+    border-radius: 8px;
+  }
+
+  .restaurante-card-content {
+    padding: 8px;
+  }
+
+  .restaurante-card-title {
+    font-size: 13px;
+  }
+}

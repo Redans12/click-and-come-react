@@ -1,9 +1,18 @@
 import React from 'react';
 import RestauranteCard from './RestauranteCard';
+import './ListaRestaurantes.css';
 
 const ListaRestaurantes = ({ restaurantes = [] }) => {
+  if (!restaurantes || restaurantes.length === 0) {
+    return (
+      <div className="lista-restaurantes-empty">
+        <p>No hay restaurantes disponibles</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="lista-restaurantes">
       {restaurantes.map((restaurante) => (
         <RestauranteCard 
           key={restaurante.id_restaurante} 

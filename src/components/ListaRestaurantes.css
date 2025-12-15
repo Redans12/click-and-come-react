@@ -1,0 +1,77 @@
+/* ============================================
+   LISTA RESTAURANTES - GRID 100% RESPONSIVE
+   ============================================ */
+
+.lista-restaurantes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.lista-restaurantes-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* ============================================
+   DESKTOP LARGE (>1400px)
+   ============================================ */
+@media (min-width: 1400px) {
+  .lista-restaurantes {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 28px;
+  }
+}
+
+/* ============================================
+   DESKTOP (1024px - 1400px)
+   ============================================ */
+@media (max-width: 1400px) {
+  .lista-restaurantes {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+/* ============================================
+   TABLET LARGE (900px - 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+  .lista-restaurantes {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ============================================
+   TABLET (640px - 900px)
+   ============================================ */
+@media (max-width: 900px) {
+  .lista-restaurantes {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* ============================================
+   MOBILE LARGE (480px - 640px)
+   ============================================ */
+@media (max-width: 640px) {
+  .lista-restaurantes {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* ============================================
+   MOBILE (< 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .lista-restaurantes {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
