@@ -139,10 +139,20 @@ const Navbar = ({ onLoginClick, searchTerm = '', onSearchChange, restaurantes = 
           </div>
           <div className="separator"></div>
           
-          <button className="nav-item nav-button">hoy</button>
+          <button 
+            className="nav-item nav-button"
+            onClick={() => navigate('/')}
+          >
+            hoy
+          </button>
           <div className="separator"></div>
           
-          <button className="nav-item nav-button">Todo el día</button>
+          <button 
+            className="nav-item nav-button"
+            onClick={() => navigate('/')}
+          >
+            Todo el día
+          </button>
           <div className="separator"></div>
           
           {user ? (

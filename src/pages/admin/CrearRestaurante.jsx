@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Store, Tag, Settings, AlertCircle } from "lucide-react";
+import { ArrowLeft, Store, Tag, Settings, AlertCircle, Image as ImageIcon, Plus, X } from "lucide-react";
 import { supabase } from "../../config/supabaseClient";
 
 const CrearRestaurante = () => {
@@ -16,6 +16,7 @@ const CrearRestaurante = () => {
     rango_precio: "$",
     calificacion_inicial: 0,
     imagen_url: "",
+    imagenes: ["", "", "", ""], // 4 imágenes adicionales
     id_dueno: null,
     activo: true,
     auto_seleccion: true,
@@ -29,11 +30,42 @@ const CrearRestaurante = () => {
     }));
   };
 
+  // Manejar cambio en imágenes adicionales
+  const handleImagenChange = (index, value) => {
+    const nuevasImagenes = [...formData.imagenes];
+    nuevasImagenes[index] = value;
+    setFormData((prev) => ({
+      ...prev,
+      imagenes: nuevasImagenes,
+    }));
+  };
+
+  // Agregar campo de imagen
+  const agregarCampoImagen = () => {
+    if (formData.imagenes.length < 4) {
+      setFormData((prev) => ({
+        ...prev,
+        imagenes: [...prev.imagenes, ""],
+      }));
+    }
+  };
+
+  // Eliminar campo de imagen
+  const eliminarCampoImagen = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      imagenes: prev.imagenes.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      // Filtrar solo las imágenes que tienen URL
+      const imagenesValidas = formData.imagenes.filter(img => img.trim() !== "");
+      
       const { data, error } = await supabase
         .from("restaurantes")
         .insert([
@@ -47,6 +79,7 @@ const CrearRestaurante = () => {
             rango_precio: formData.rango_precio,
             calificacion_promedio: parseFloat(formData.calificacion_inicial),
             imagen_url: formData.imagen_url,
+            imagenes: imagenesValidas.length > 0 ? imagenesValidas : null, // Array de imágenes adicionales
             id_dueno: formData.id_dueno || null,
             activo: formData.activo,
           },
@@ -286,36 +319,140 @@ const CrearRestaurante = () => {
           </div>
         </div>
 
+        {/* 🔥 GALERÍA DE IMÁGENES */}
+        <div className="bg-white rounded-xl shadow-lg mb-6 overflow-hidden">
+          <div className="bg-purple-600 text-white px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <ImageIcon className="w-6 h-6" />
+              <div>
+                <h3 className="font-bold text-lg">Galería de Imágenes</h3>
+                <p className="text-sm text-purple-100">
+                  Agrega hasta 5 imágenes del restaurante
+                </p>
+              </div>
+            </div>
+            <span className="text-sm bg-white bg-opacity-20 px-3 py-1 rounded-full">
+              {1 + formData.imagenes.filter(img => img.trim() !== "").length}/5 imágenes
+            </span>
+          </div>
+
+          <div className="p-6 space-y-4">
+            {/* Imagen Principal */}
+            <div className="border-2 border-purple-200 rounded-lg p-4 bg-purple-50">
+              <div className="flex items-center gap-2 mb-3">
+                <ImageIcon className="w-5 h-5 text-purple-600" />
+                <label className="text-sm font-bold text-purple-900">
+                  Imagen Principal * (Imagen 1)
+                </label>
+              </div>
+              <input
+                type="text"
+                name="imagen_url"
+                value={formData.imagen_url}
+                onChange={handleChange}
+                placeholder="images/restaurantes/principal.jpg"
+                required
+                className="w-full px-4 py-3 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+              />
+              <p className="text-xs text-purple-700 mt-2">
+                ⭐ Esta será la imagen destacada del restaurante
+              </p>
+              {formData.imagen_url && (
+                <div className="mt-3">
+                  <img
+                    src={formData.imagen_url}
+                    alt="Vista previa"
+                    className="h-32 w-full object-cover rounded-lg"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/400x200?text=Error+al+cargar';
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Imágenes Adicionales */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-gray-700">
+                  Imágenes Adicionales (Opcional)
+                </h4>
+                {formData.imagenes.length < 4 && (
+                  <button
+                    type="button"
+                    onClick={agregarCampoImagen}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition text-sm font-medium"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Agregar Imagen
+                  </button>
+                )}
+              </div>
+
+              {formData.imagenes.map((imagen, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ImageIcon className="w-4 h-4 text-gray-600" />
+                    <label className="text-sm font-medium text-gray-700">
+                      Imagen {index + 2}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => eliminarCampoImagen(index)}
+                      className="ml-auto p-1 text-red-600 hover:bg-red-100 rounded transition"
+                      title="Eliminar"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={imagen}
+                    onChange={(e) => handleImagenChange(index, e.target.value)}
+                    placeholder={`images/restaurantes/imagen-${index + 2}.jpg`}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                  />
+                  {imagen && (
+                    <div className="mt-2">
+                      <img
+                        src={imagen}
+                        alt={`Vista previa ${index + 2}`}
+                        className="h-24 w-full object-cover rounded-lg"
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/400x200?text=Error+al+cargar';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2">
+              <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-blue-800">
+                <p className="font-medium mb-1">💡 Consejos para las imágenes:</p>
+                <ul className="list-disc list-inside space-y-1 text-xs">
+                  <li>Usa rutas relativas desde la carpeta public</li>
+                  <li>Las imágenes se mostrarán en la galería del restaurante</li>
+                  <li>Puedes agregar hasta 5 imágenes en total</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Configuración */}
         <div className="bg-white rounded-xl shadow-lg mb-6 overflow-hidden">
           <div className="bg-red-700 text-white px-6 py-4 flex items-center gap-3">
             <Settings className="w-6 h-6" />
             <div>
               <h3 className="font-bold text-lg">Configuración</h3>
-              <p className="text-sm text-red-100">Imagen, dueño y opciones</p>
+              <p className="text-sm text-red-100">Dueño y opciones</p>
             </div>
           </div>
 
           <div className="p-6 space-y-6">
-            {/* Ruta de Imagen */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Ruta de Imagen (URL) *
-              </label>
-              <input
-                type="text"
-                name="imagen_url"
-                value={formData.imagen_url}
-                onChange={handleChange}
-                placeholder="images/restaurantes/mi-restaurante.jpg"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Ruta relativa desde la carpeta public
-              </p>
-            </div>
-
             {/* Asignar Dueño */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

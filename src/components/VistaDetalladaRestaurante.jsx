@@ -555,12 +555,39 @@ const VistaDetalladaRestaurante = ({ restaurante, isOpen, onClose }) => {
 
             {/* Right Column - Image and Map - 🔥 RESPONSIVE */}
             <div className="lg:col-span-1 space-y-4">
+              {/* Imagen Principal */}
               <div className="rounded-lg overflow-hidden h-48 sm:h-64">
                 <img
                   src={restaurante.imagen_url || 'https://via.placeholder.com/400x300'}
                   alt={restaurante.nombre}
                   className="w-full h-full object-cover"
                 />
+              </div>
+
+              {/* Galería miniatura - 🔥 CON IMÁGENES REALES */}
+              <div className="grid grid-cols-5 gap-1 sm:gap-2">
+                {(() => {
+                  // Crear array con todas las imágenes disponibles
+                  const todasLasImagenes = [
+                    restaurante.imagen_url,
+                    ...(Array.isArray(restaurante.imagenes) ? restaurante.imagenes : [])
+                  ].filter(Boolean); // Eliminar valores null/undefined
+                  
+                  // Completar con placeholders hasta 5
+                  const imagenesParaMostrar = [...todasLasImagenes, ...Array(5 - todasLasImagenes.length).fill(null)].slice(0, 5);
+                  
+                  return imagenesParaMostrar.map((img, index) => (
+                    <div key={index} className={`rounded overflow-hidden h-12 sm:h-16 ${index === 0 && img ? 'ring-2 ring-blue-500' : ''} ${img ? 'cursor-pointer hover:opacity-75' : 'bg-gray-100 flex items-center justify-center'} transition`}>
+                      {img ? (
+                        <img src={img} alt={`${restaurante.nombre} - ${index + 1}`} className="w-full h-full object-cover" />
+                      ) : (
+                        <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                      )}
+                    </div>
+                  ));
+                })()}
               </div>
 
               {/* Mapa */}
